@@ -1,0 +1,183 @@
+apply plugin: 'com.android.application'
+
+def renameArtifact(variant, defaultConfig) {
+    variant.outputs.all { output ->
+        outputFileName = "capsord-${variant.buildType.name}-${defaultConfig.versionName}.apk"
+    }
+}
+
+// Create a variable called keystorePropertiesFile, and initialize it to your
+// keystore.properties file, in the rootProject folder.
+//def keystorePropertiesFile = rootProject.file("breadev.properties")
+// Initialize a new Properties() object called keystoreProperties.
+//def keystoreProperties = new Properties()
+
+// Load your keystore.properties file into the keystoreProperties object.
+//keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+
+android {
+    compileSdkVersion rootProject.ext.androidCompileSdkVersion
+    buildToolsVersion rootProject.ext.androidBuildToolsVersion
+
+    flavorDimensions "default"
+
+    applicationVariants.all { variant -> renameArtifact(variant, defaultConfig) }
+
+    defaultConfig {
+        applicationId rootProject.ext.androidApplicationId
+        minSdkVersion rootProject.ext.androidMinSdkVersion
+        targetSdkVersion rootProject.ext.androidTargetSdkVersion
+        versionCode rootProject.ext.androidVersionCode
+        versionName rootProject.ext.androidVersionName
+        multiDexEnabled true
+        resConfigs "es", "en"
+    }
+
+    productFlavors {
+        dev {
+            applicationId rootProject.ext.androidApplicationId
+            minSdkVersion rootProject.ext.androidMinSdkVersion
+            targetSdkVersion rootProject.ext.androidTargetSdkVersion
+            versionCode rootProject.ext.androidVersionCode
+            versionName rootProject.ext.androidVersionName
+            versionNameSuffix "-dev"
+        }
+
+        prod {
+            applicationId 'com.breadev.baseproj.android.prod'
+            minSdkVersion rootProject.ext.androidMinSdkVersion
+            targetSdkVersion rootProject.ext.androidTargetSdkVersion
+            versionCode rootProject.ext.androidVersionCode
+            versionName rootProject.ext.androidVersionName
+            versionNameSuffix "-prod"
+        }
+    }
+
+
+    signingConfigs {
+
+        debug {
+            storeFile file("breadev.jks")
+            storePassword "breadev"
+            keyAlias "breadev"
+            keyPassword "breadev"
+
+            /*
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']*/
+        }
+
+        release {
+            storeFile file("breadev.jks")
+            storePassword "breadev"
+            keyAlias "breadev"
+            keyPassword "breadev"
+        }
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+            applicationIdSuffix ".debug"
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "SERVER_URL", '"http://test.server.com"'
+        }
+        release {
+            applicationIdSuffix ".release"
+            minifyEnabled true
+            useProguard false
+            shrinkResources true
+            debuggable false
+            signingConfig signingConfigs.release
+            buildConfigField "String", "SERVER_URL", '"http://prod.server.com"'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility rootProject.ext.sourceCompatibility
+        targetCompatibility rootProject.ext.sourceCompatibility
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
+
+    lintOptions {
+        quiet true
+        abortOnError false
+        ignoreWarnings true
+        disable 'InvalidPackage'            //Some libraries have issues with this.
+        disable 'OldTargetApi'
+        //Lint gives this warning but SDK 20 would be Android L Beta.
+        disable 'IconDensities'             //For testing purpose. This is safe to remove.
+        disable 'IconMissingDensityFolder'  //For testing purpose. This is safe to remove.
+    }
+}
+
+dependencies {
+    def presentationDependencies = rootProject.ext.presentationDependencies
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    compileOnly presentationDependencies.javaxAnnotation
+
+    //Gson
+    implementation presentationDependencies.gson
+
+    //Support
+    implementation presentationDependencies.appcompat
+    implementation presentationDependencies.support
+    implementation presentationDependencies.design
+    implementation presentationDependencies.recyclerView
+    implementation presentationDependencies.cardview
+
+    //Dagger
+    implementation presentationDependencies.dagger
+    implementation presentationDependencies.daggerSupport
+    annotationProcessor presentationDependencies.daggerCompiler
+    annotationProcessor presentationDependencies.daggerProcessor
+
+    //Butter Knife
+    implementation presentationDependencies.butterKnife
+    annotationProcessor presentationDependencies.butterKnifeApt
+
+    //Okhttp3
+    implementation presentationDependencies.okHttp
+    implementation presentationDependencies.okHttpLogInterceptor
+
+    //Retrofit
+    implementation presentationDependencies.retrofit
+    implementation presentationDependencies.retrofitConverter
+    implementation presentationDependencies.retrofitAdapter
+
+    //Rx
+    implementation presentationDependencies.rxJava
+    implementation presentationDependencies.rxAndroid
+
+    //UI Design
+    implementation presentationDependencies.bottombar
+
+    //UI Validation
+    implementation presentationDependencies.saripaar
+
+    //Parceler
+    implementation presentationDependencies.parcelerApi
+    annotationProcessor presentationDependencies.parcelerPro
+
+    //MapStruct
+    implementation presentationDependencies.mapstruct
+    annotationProcessor presentationDependencies.mapstructProcessor
+
+    //Modules
+    implementation project(':transversal')
+    implementation project(':data')
+    implementation project(':domain')
+}

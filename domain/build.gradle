@@ -1,0 +1,38 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.androidCompileSdkVersion
+    buildToolsVersion rootProject.ext.androidBuildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.androidMinSdkVersion
+        targetSdkVersion rootProject.ext.androidTargetSdkVersion
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            useProguard false
+        }
+    }
+}
+
+dependencies {
+    def domainDependencies = rootProject.ext.domainDependencies
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly domainDependencies.javaxAnnotation
+    //Dagger
+    implementation domainDependencies.dagger
+    implementation domainDependencies.daggerSupport
+    annotationProcessor domainDependencies.daggerCompiler
+    annotationProcessor domainDependencies.daggerProcessor
+    //Rx
+    implementation domainDependencies.rxJava
+    implementation domainDependencies.rxAndroid
+    //MapStruct
+    implementation domainDependencies.mapstruct
+    annotationProcessor domainDependencies.mapstructProcessor
+    //Modules
+    implementation project(':data')
+}

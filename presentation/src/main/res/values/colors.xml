@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--color name="colorPrimary">#3F51B5</color-->
+    <color name="colorPrimary">#202e87</color>
+    <color name="colorPrimaryDark">#03116b</color>
+    <color name="colorSecondary">#33b1f7</color>
+    <color name="textColorPrimary">#000000</color>
+    <color name="textColorSecundary">#202e87</color>
+    <color name="windowBackground">#FFFFFF</color>
+    <color name="windowBackground2">#f2ffffff</color>
+    <color name="navigationBarColor">#000000</color>
+    <color name="colorAccent">#202e87</color>
+    <color name="colorFocus">#202e87</color>
+    <color name="colorBotonAceptar">#202e87</color>
+    <color name="colorBotonCancelar">#FFFFFF</color>
+
+    <color name="colorErrorInputText">#e10c10</color>
+    <color name="colorImportantValue">#d84a38</color>
+
+    <color name="colorEditText">#3F51B5</color>
+    <color name="colorTextHint">#000000</color>
+
+    <color name="colorButtonNormal">#c34687d7</color>
+
+    <color name="colorControlNormal">#000000</color>
+    <color name="colorControlActivated">#202e87</color>
+
+    <!--COLOR SCREEN SPLASH-->
+    <color name="colorSplash">#FFFFFF</color>
+    <!--COLORES LOGIN-->
+    <color name="color_copyright_texto">#000000</color>
+    <color name="color_negro">#000000</color>
+    <color name="tabsScrollColor">#FFFFFF</color>
+    <color name="colorDivider">#FFFFFF</color>
+    <color name="colorItemBackground">#c34687d7</color>
+    <color name="colorFab">#c34687d7</color>
+    <color name="colorRipple">#A9A9F5</color>
+    <item name="colorTransparent" type="color">#00FFFFFF</item>
+    <color name="bg_screen3">#3395ff</color>
+    <color name="bg_screen31">#4ba0fc</color>
+    <color name="btn_login_bg">#eceef1</color>
+
+
+
+    <color name="grey_100">#F5F5F5</color>
+    <color name="grey_300">#E0E0E0</color>
+</resources>

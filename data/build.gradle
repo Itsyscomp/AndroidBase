@@ -1,0 +1,63 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion rootProject.ext.androidCompileSdkVersion
+    buildToolsVersion rootProject.ext.androidBuildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.androidMinSdkVersion
+        targetSdkVersion rootProject.ext.androidTargetSdkVersion
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            useProguard false
+        }
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+    }
+
+    lintOptions {
+        quiet true
+        abortOnError false
+        ignoreWarnings true
+        disable 'InvalidPackage'            //Some libraries have issues with this.
+        disable 'OldTargetApi'
+        //Lint gives this warning but SDK 20 would be Android L Beta.
+        disable 'IconDensities'             //For testing purpose. This is safe to remove.
+        disable 'IconMissingDensityFolder'  //For testing purpose. This is safe to remove.
+    }
+}
+
+dependencies {
+    def dataDependencies = rootProject.ext.dataDependencies
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    compileOnly dataDependencies.javaxAnnotation
+    //Gson
+    implementation dataDependencies.gson
+    //Okhttp3
+    implementation dataDependencies.okHttp
+    implementation dataDependencies.okHttpLogInterceptor
+    //Retrofit
+    implementation dataDependencies.retrofit
+    implementation dataDependencies.retrofitConverter
+    implementation dataDependencies.retrofitAdapter
+    //Dagger
+    implementation dataDependencies.dagger
+    implementation dataDependencies.daggerSupport
+    annotationProcessor dataDependencies.daggerCompiler
+    annotationProcessor dataDependencies.daggerProcessor
+    //Rx
+    implementation dataDependencies.rxJava
+    implementation dataDependencies.rxAndroid
+
+    //Modules
+    //implementation project(':transversal')
+}
